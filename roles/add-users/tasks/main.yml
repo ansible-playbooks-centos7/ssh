@@ -1,0 +1,12 @@
+- name: Create user accounts
+  user:
+    name: '{{ item.name }}'
+  loop: '{{ users }}'
+
+- name: Add authorized keys
+  authorized_key:
+    user: '{{ item.0.name }}'
+    key: '{{ item.1 }}'
+  with_subelements:
+    - '{{ users }}'
+    - authorized_keys
