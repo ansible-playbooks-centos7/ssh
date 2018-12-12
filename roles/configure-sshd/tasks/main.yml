@@ -1,0 +1,85 @@
+- name: Enable firewalld
+  become: yes
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Disable password login
+  become: yes
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: "^PasswordAuthentication yes"
+    line: "PasswordAuthentication no"
+
+- name: Disable root login
+  become: yes
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: "^#PermitRootLogin yes"
+    line: "PermitRootLogin no"
+
+- name: Enable SSH key authentication
+  become: yes
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: "^#PubkeyAuthentication yes"
+    line: "PubkeyAuthentication yes"
+
+- name: Change SSHD port
+  become: yes
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: "^#Port 22"
+    line: "Port {{ sshd_port }}"
+
+- name: Allow the new SSHD port through the firewall
+  become: yes
+  firewalld:
+    port: "{{ sshd_port }}/tcp"
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+- name: Copy firewall settings file from '/usr/lib/firewalld/services/ssh.xml' to '/etc/firewalld/services/ssh.xml'
+  become: yes
+  copy:
+    src: /usr/lib/firewalld/services/ssh.xml
+    dest: /etc/firewalld/services/ssh.xml
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Apply new SSHD port settings to '/etc/firewalld/services/ssh.xml'
+  become: yes
+  replace:
+    path: /etc/firewalld/services/ssh.xml
+    regexp: 'port="22"'
+    replace: "port={{ sshd_port }}"
+
+- name: Restart sshd
+  become: yes
+  service:
+    name: sshd
+    state: restarted
+
+- name: Wait for sshd stopped
+  become: no
+  local_action: wait_for
+  args:
+    host: '{{ inventory_hostname }}'
+    port: 22
+    state: stopped
+
+- name: Wait for sshd started
+  become: no
+  local_action: wait_for
+  args:
+     host: '{{ inventory_hostname }}'
+     port: '{{ sshd_port }}'
+     state: started
+     delay: 15
