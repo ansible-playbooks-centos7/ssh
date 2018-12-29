@@ -1,0 +1,18 @@
+- name: Create user 'ansible'
+  user:
+    name: ansible
+    generate_ssh_key: yes
+
+- name: Create ssh config file under /home/ansible/.ssh/
+  template:
+    src: templates/config
+    dest: /home/ansible/.ssh/config
+    owner: ansible
+    group: ansible
+    mode: 0600
+
+- name: Add authorized keys of user 'ansible'
+  authorized_key:
+    user: ansible
+    state: present
+    key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
