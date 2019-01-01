@@ -37,7 +37,7 @@
     regexp: "^#Port 22"
     line: "Port {{ sshd_port }}"
 
-- name: Allow the new SSHD port through the firewall
+- name: Allow the new SSHD port through the firewall / Ansible needs to use this port for operating the node machine
   become: yes
   firewalld:
     port: "{{ sshd_port }}/tcp"
@@ -59,7 +59,7 @@
   replace:
     path: /etc/firewalld/services/ssh.xml
     regexp: 'port="22"'
-    replace: "port={{ sshd_port }}"
+    replace: "port=\"{{ sshd_port }}\""
 
 - name: Restart sshd
   become: yes
