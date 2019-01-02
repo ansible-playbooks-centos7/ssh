@@ -1,0 +1,5 @@
+- name: Generate sshkey
+  become: yes
+  user:
+    name: "{{ sshkey_user }}"
+    generate_ssh_key: yes
