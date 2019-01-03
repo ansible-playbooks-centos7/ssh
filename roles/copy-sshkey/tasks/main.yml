@@ -1,0 +1,20 @@
+- name: Create Directory to copy SSH Key
+  become: yes
+  file:
+    path: '{{ target_dir }}'
+    state: directory
+    owner: '{{ sshkey_owner }}'
+    group: '{{ sshkey_group }}'
+    mode: '{{ sshkey_mode }}'
+    recurse: yes
+
+- name: Copy SSH key to target directory
+  become: yes
+  copy:
+    src: '{{ sshkey_path }}'
+    dest: "{{ target_dir }}/{{ sshkey_file_name }}"
+    owner: '{{ sshkey_owner }}'
+    group: '{{ sshkey_group }}'
+    mode: '{{ sshkey_mode }}'
+    remote_src: yes
+    force: yes

@@ -1,0 +1,7 @@
+sshkey_user: root
+sshkey_file_name: id_rsa.pub
+sshkey_path: "/home/{{ sshkey_user }}/.ssh/{{ sshkey_file_name }}"
+target_dir: /tmp
+sshkey_owner: '{{ sshkey_user }}'
+sshkey_group: '{{ sshkey_user }}'
+sshkey_mode: 0755
