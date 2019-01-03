@@ -1,0 +1,2 @@
+pubkey_user: root
+pubkey_path: /root/.ssh/id_rsa.pub

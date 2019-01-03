@@ -1,0 +1,5 @@
+- name: Add authorized keys of user 'ansible'
+  authorized_key:
+    user: '{{ pubkey_user }}'
+    state: present
+    key: "{{ lookup('file', '{{ pubkey_path }}') }}"
