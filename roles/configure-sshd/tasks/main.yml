@@ -71,7 +71,7 @@
   become: no
   local_action: wait_for
   args:
-    host: '{{ inventory_hostname }}'
+    host: '{{ ansible_host }}'
     port: 22
     state: stopped
 
@@ -79,7 +79,7 @@
   become: no
   local_action: wait_for
   args:
-     host: '{{ inventory_hostname }}'
-     port: '{{ sshd_port }}'
-     state: started
-     delay: 15
+    host: '{{ ansible_host }}'
+    port: '{{ sshd_port }}'
+    state: started
+    delay: 15
