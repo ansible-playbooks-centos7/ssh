@@ -1,3 +1,32 @@
+- name: Delete working dir
+  become: False
+  file:
+    path: '{{ work_dir }}/'
+    state: absent
+  delegate_to: localhost
+
+- name: Create working dir
+  become: False
+  file:
+    path: '{{ work_dir }}'
+    state: directory
+    recurse: yes
+  delegate_to: localhost
+
+- name: Retrieve users and pub key variable file
+  become: False
+  git:
+    repo: '{{ git_url_users_pubkeys }}'
+    dest: '{{ work_dir }}'
+    version: '{{ repo_version }}'
+  delegate_to: localhost
+
+- name: Load variable file
+  become: False
+  include_vars:
+    file: "{{ work_dir }}/{{ var_file_name }}"
+  delegate_to: localhost
+
 - name: Create user accounts
   user:
     name: '{{ item.name }}'

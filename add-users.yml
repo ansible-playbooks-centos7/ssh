@@ -1,7 +1,8 @@
 ---
 - hosts: all
+  become: True
   vars_files:
-    - vars/users-and-pub-keys.yml
+    - vars/add-users.yml
 
   roles:
     - add-users

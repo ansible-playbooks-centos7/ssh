@@ -1,0 +1,4 @@
+git_url_users_pubkeys: https://github.com/ansible-centos7/ssh-users-and-pub-keys.git
+repo_version: master
+var_file_name: users-and-pub-keys.yml
+work_dir: ~/.ansible-add-users
