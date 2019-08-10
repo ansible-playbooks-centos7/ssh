@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  become: True
   vars_files:
     - vars/sshd.yml
 
