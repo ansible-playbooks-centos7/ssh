@@ -58,6 +58,7 @@
   service:
     name: sshd
     state: restarted
+  ignore_errors: yes
 
 - name: Wait for sshd stopped
   become: False 
